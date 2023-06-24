@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Filmes</title>
+	<style type="text/css">
+		.ui-widget, .ui-widget .ui-widget {
+    		font-size: 90%;
+		}
+	</style>
+</h:head>
+
+<h:body>
+<h:form id="createForm">
+	<p:growl id="messages" autoUpdate="true" globalOnly="true" />
+	
+	<!-- O editMode deve ser passado entre requisições, por isso é definido com um campo hidden  -->
+	<h:inputHidden value="#{movieBean.editMode}" />
+	
+	<!-- Painel de entrada de dados -->
+	<p:panel header="#{movieBean.panelTitle}">
+		<h:panelGrid columns="3">
+			<h:outputLabel for="name" value="Nome:" />
+			<!-- Se estiver em modo de edição, o nome não pode ser alterado -->
+			<p:inputText id="name" value="#{movieBean.movie.name}" required="true" requiredMessage="Forneça um nome" readonly="#{movieBean.editMode}" />
+			<p:message for="name" />
+			
+			<h:outputLabel for="description" value="Descrição:" />
+			<p:inputTextarea id="description" value="#{movieBean.movie.description}" rows="3" cols="40" required="true" requiredMessage="Forneça uma descrição" />
+			<p:message for="description" />
+			
+			<h:outputLabel for="rating" value="Classificação:" />
+			<p:rating id="rating" value="#{movieBean.movie.rating}" cancel="false" required="true" requiredMessage="Forneça uma classificação" />
+			<p:message for="rating" />
+			
+			<h:outputText value="" />
+			<p:commandButton value="#{movieBean.buttonLabel}" action="#{movieBean.saveMovie}" update=":tableForm :createForm" />
+		</h:panelGrid>
+	</p:panel>
+</h:form>
+
+<br />
+
+<h:form id="tableForm">
+	<!-- Menu de context para a tabela, acessado através do botão direito do mouse -->
+	<p:contextMenu for="table">    
+        <p:menuitem value="Editar" update=":createForm :tableForm" icon="ui-icon-close" action="#{movieBean.loadMovie}" />  
+        <p:menuitem value="Excluir" update=":tableForm" icon="ui-icon-close" action="#{movieBean.deleteMovie}" />
+    </p:contextMenu>
+	
+	<!-- Tabela de filmes cadastrados. Permite seleção de linhas (uma por vez) -->
+	<p:dataTable id="table" value="#{movieBean.movies}" var="movie" emptyMessage="Nenhum filme cadastrado" 
+		selection="#{movieBean.selectedMovie}" selectionMode="single" rowKey="#{movie.name}" >
+
+		<f:facet name="header">
+			<h:outputText value="Filmes Cadastrados" />
+		</f:facet>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="Nome" />
+			</f:facet>
+			<h:outputText value="#{movie.name}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="Descrição" />
+			</f:facet>
+			<h:outputText value="#{movie.description}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="Classificação" />
+			</f:facet>
+			<p:rating value="#{movie.rating}" readonly="true" />
+		</p:column>
+	</p:dataTable>
+</h:form>
+
+</h:body>
+</html>

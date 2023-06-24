@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/layout.xhtml">
+	<ui:define name="title">Cadastrar Compra</ui:define>
+	
+	<ui:define name="content">
+		<h:form styleClass="wufoo">
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Cartão de crédito:" styleClass="desc" />
+				<h:selectOneMenu id="cartaoCredito" value="#{compraBean.compra.cartaoCredito.id}" required="true" styleClass="field select addr">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{compraBean.cartoesCredito}" var="c" itemValue="#{c.id}" itemLabel="#{c.bandeira} - #{c.descricao}" />
+				</h:selectOneMenu>
+				<h:message for="cartaoCredito" />
+			
+				<h:outputLabel value="Data (dd/mm/aaaa):" styleClass="desc" />
+				<h:inputText id="data" value="#{compraBean.compra.data}" required="true" maxlength="10" styleClass="field text large">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:inputText>
+				<h:message for="data" />
+				
+				<h:outputLabel value="Descrição:" styleClass="desc" />
+				<h:inputText id="descricao" value="#{compraBean.compra.descricao}" required="true" maxlength="40" styleClass="field text large">
+					<f:validateLength maximum="40" />
+				</h:inputText>
+				<h:message for="descricao" />
+				
+				<h:outputLabel value="Valor:" styleClass="desc" />
+				<h:inputText id="valor" value="#{compraBean.compra.valor}" required="true" maxlength="8" styleClass="field text large">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" groupingUsed="false" />
+					<f:validateDoubleRange minimum="0" maximum="99999.99" />
+				</h:inputText>
+				<h:message for="valor" />
+				
+				<h:outputLabel value="Parcelas:" styleClass="desc" />
+				<h:selectOneMenu id="numParcelas" value="#{compraBean.compra.numParcelas}" required="true" styleClass="field select addr">
+					<f:selectItem itemValue="1" />
+					<f:selectItem itemValue="2" />
+					<f:selectItem itemValue="3" />
+					<f:selectItem itemValue="4" />
+					<f:selectItem itemValue="5" />
+					<f:selectItem itemValue="6" />
+					<f:selectItem itemValue="7" />
+					<f:selectItem itemValue="8" />
+					<f:selectItem itemValue="9" />
+					<f:selectItem itemValue="10" />
+					<f:selectItem itemValue="11" />
+					<f:selectItem itemValue="12" />
+				</h:selectOneMenu>
+				<h:message for="numParcelas" />
+				
+				<h:outputLabel value="Tipo:" styleClass="desc" />
+				<h:selectOneMenu id="tipo" value="#{compraBean.compra.tipo}" required="true" styleClass="field select addr">
+					<f:selectItems value="#{compraBean.tipos}" />
+				</h:selectOneMenu>
+				<h:message for="tipo" />
+			</h:panelGrid>
+			
+			<h:outputText value="#{''}" />
+			<h:commandButton value="Gravar" action="#{compraBean.gravar}" styleClass="btTxt" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+	
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:my="http://mytags">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Validadores</title>
+</h:head>
+
+<h:outputStylesheet library="css" name="styles.css" />
+
+<body>
+
+<h:form>
+	<h:panelGrid columns="3" columnClasses="label">
+		Data de Nascimento:
+		<h:inputText id="dataNasc" value="#{form.dataNasc}" styleClass="text" required="true">
+			<f:convertDateTime pattern="dd/MM/yy" />
+			<my:validateDate msg="A data não pode ser maior que a data atual" />
+		</h:inputText>
+		<h:message for="dataNasc" styleClass="error" />
+		
+		Endereço:
+		<h:inputText id="endereco" value="#{form.endereco}" styleClass="text" required="true">
+			<my:convertEndereco separador="," />
+		</h:inputText>
+		<h:message for="endereco" styleClass="error" />
+		
+		<h:commandButton value="Processar" action="#{form.processar}" styleClass="button" />
+	</h:panelGrid>
+</h:form>
+</body>
+</html>

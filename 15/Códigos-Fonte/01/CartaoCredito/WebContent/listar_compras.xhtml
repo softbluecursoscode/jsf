@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/layout.xhtml">
+	<ui:define name="title">Listar Compras</ui:define>
+	
+	<ui:define name="content">
+		<!-- Copia o parâmetro 'limpar' da request para o bean -->
+		<f:metadata>
+			<f:viewParam name="limpar" value="#{listarComprasBean.limpar}" />	
+		</f:metadata>
+		
+		<!-- Chama o método init() toda vez que a view é renderizada -->
+		<f:event listener="#{listarComprasBean.init}" type="preRenderView" />
+	
+		<script>
+			function excluir() {
+				return confirm("Todos os lançamentos da compra serão excluídos. Deseja continuar?");
+			}
+		
+		</script>
+	
+		<h:form styleClass="wufoo">
+			<h:panelGrid columns="5">
+				<h:outputLabel value="Cartão de crédito:" styleClass="desc" />
+				<h:selectOneMenu id="cartaoCredito" value="#{listarComprasBean.cartaoCredito.id}" required="true" styleClass="field select addr">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{listarComprasBean.cartoesCredito}" var="c" itemValue="#{c.id}" itemLabel="#{c.bandeira} - #{c.descricao}" />
+				</h:selectOneMenu>
+				
+				<h:outputLabel value="Data (mm/aaaa):" styleClass="desc" />
+				<h:inputText id="data" value="#{listarComprasBean.mesAno}" required="true" maxlength="7" styleClass="field text medium">
+					<f:convertDateTime pattern="MM/yyyy" />
+				</h:inputText>
+		
+				<h:commandButton value="Pesquisar" action="#{listarComprasBean.pesquisar}" styleClass="btTxt" />
+				
+				<h:outputText value="#{' '}" />
+				<h:message for="cartaoCredito" />
+				<h:outputText value="#{' '}" />
+				<h:message for="data" />
+			</h:panelGrid>
+		</h:form>
+		
+		<h:panelGroup rendered="#{listarComprasBean.lancamentos.size() > 0}">
+			<h:form styleClass="wufoo">
+				<h:dataTable value="#{listarComprasBean.lancamentos}" var="l" styleClass="tabela" headerClass="cabecalho" columnClasses="colVenc,colDescricao,colValor,colParcela,colTipo,colExcluir">
+					<h:column>
+						<f:facet name="header">
+							Data
+						</f:facet>
+						<h:outputText value="#{l.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Descrição
+						</f:facet>
+						#{l.compra.descricao}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Valor
+						</f:facet>
+						<h:outputText value="#{l.valor}">
+							<f:convertNumber type="currency" />
+						</h:outputText>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Parcela
+						</f:facet>
+						#{l.numParcela}/#{l.compra.numParcelas}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Tipo
+						</f:facet>
+						#{l.compra.tipo}
+					</h:column>
+					
+					<h:column>
+						<h:commandLink action="#{listarComprasBean.excluir(l.compra.id)}" onclick="return excluir();">Excluir</h:commandLink>
+					</h:column>
+				</h:dataTable>
+			
+				<br />
+				<h:panelGrid columns="2">
+					<h:outputLabel value="Valor total:" styleClass="desc" />
+					<h:outputText value="#{listarComprasBean.valorTotal}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+					
+					<h:outputLabel value="Limite do cartão:" styleClass="desc" />
+					<h:outputText value="#{listarComprasBean.cartaoCredito.limite}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+					
+					<h:outputLabel value="Valor disponível:" styleClass="desc" />
+					<h:outputText value="#{listarComprasBean.valorDisponivel}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</h:panelGrid>
+			</h:form>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+	
+</html>

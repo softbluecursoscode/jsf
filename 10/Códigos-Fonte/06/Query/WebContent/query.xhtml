@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>JPQL Queries</title>
+</h:head>
+
+<body>
+
+<h:form>
+
+<h3>Query:</h3>
+<h:messages />
+<h:inputTextarea value="#{queryBean.query}" rows="6" cols="80" />
+<br />
+<h:commandButton value="Executar" action="#{queryBean.executar}" />
+
+<h:panelGroup rendered="#{queryBean.results != null}">
+	<br />
+	<h4>Foram encontrados #{queryBean.results.size()} registros</h4>
+	
+	<table border="1" style="width: 100%">
+		<ui:repeat var="r" value="#{queryBean.results}" varStatus="st">
+			<tr>
+				<td style="width: 5%; text-align: center">#{st.index + 1}</td>
+				<td style="width: 95%">#{r}</td>
+			</tr>
+		</ui:repeat>
+	</table>
+</h:panelGroup>
+
+
+
+</h:form>
+</body>
+</html>

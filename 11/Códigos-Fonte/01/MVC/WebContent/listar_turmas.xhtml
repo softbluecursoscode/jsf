@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Gerenciamento de Turmas</title>
+</h:head>
+
+<body>
+
+<h:form>
+<table border="1">
+	<tr>
+		<td colspan="3" align="center"><h3>Lista de Turmas</h3></td>
+	</tr>
+	<tr>
+		<th style="width: 120px;">Nome</th>
+		<th style="width: 120px;">Núm. Sala</th>
+		<th style="width: 120px;"></th>
+	</tr>
+	<h:panelGroup rendered="#{turmas.turmas.size() > 0}">
+		<ui:repeat value="#{turmas.turmas}" var="turma">
+			<tr>
+				<td align="center">#{turma.nome}</td>
+				<td align="center">#{turma.numSala}</td>
+				<td align="center">
+					<h:commandLink value="Alterar" action="#{turmas.alterar(turma)}" />
+					|
+					<h:commandLink value="Excluir" action="#{turmas.excluir(turma)}" />
+				</td>
+			</tr>
+		</ui:repeat>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{turmas.turmas.size() == 0}">
+		<tr>
+			<td colspan="3" align="center">Não existem turmas cadastradas</td>
+		</tr>
+	</h:panelGroup>
+</table>
+<h:commandButton value="Inserir Turma" action="#{turmas.novaTurma}" />
+</h:form>
+<p>
+	<h:link value="Página Inicial" outcome="index" />
+</p>
+</body>
+</html>

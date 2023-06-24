@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Cadastro</title>
+	<style type="text/css">
+		.ui-widget, .ui-widget .ui-widget {
+			font-size: 90%;
+		}
+	</style>
+</h:head>
+
+<h:body>
+<h:form id="form">
+	<p:messages showDetail="true" severity="info" closable="true" globalOnly="true" />
+
+	<p:panel id="panel" header="Cadastro de Transferência">
+		<p:tabView effect="fade" effectDuration="normal">
+			<p:tab title="Cliente">
+				<h:panelGrid columns="3">
+					<h:outputLabel for="nome" value="Nome:" />
+					<p:inputText id="nome" value="#{cadastroBean.cliente.nome}" required="true" requiredMessage="O nome deve ser preenchido" />
+					<p:message for="nome" display="both" />
+					
+					<h:outputLabel for="cpf" value="CPF:" />
+					<p:inputMask id="cpf" value="#{cadastroBean.cliente.cpf}" mask="999.999.999-99" required="true" requiredMessage="O CPF deve ser preenchido" />
+					<p:message for="cpf" />
+					
+					<h:outputLabel for="dataNasc" value="Data de Nasc.:" />
+					<p:calendar id="dataNasc" value="#{cadastroBean.cliente.dataNasc}" required="true" requiredMessage="A data de nascimento deve ser preenchida" />
+					<p:message for="dataNasc" />
+				</h:panelGrid>
+			</p:tab>
+			
+			<p:tab title="Transferência">
+				<h:panelGrid columns="3">
+					<h:outputLabel for="banco" value="Banco:" />
+					<p:autoComplete id="banco" value="#{cadastroBean.transf.banco}" completeMethod="#{cadastroBean.listarBancos}" required="true" requiredMessage="O banco deve ser preenchido" />
+					<p:message for="banco" />
+					
+					<h:outputLabel for="valor" value="Valor:" />
+					<p:inputText id="valor" value="#{cadastroBean.transf.valor}" />
+					<p:slider for="valor" style="width:200px;" minValue="0" maxValue="1000" step="50" />
+					
+					<h:outputLabel for="repet" value="Repetições:" />
+					<p:spinner id="repet" value="#{cadastroBean.transf.repetir}" min="0" max="5" suffix="x" />
+					<p:message for="repet" />
+				</h:panelGrid>
+				
+			</p:tab>
+		</p:tabView>
+
+		<p:commandButton id="transfBtn" value="Cadastrar" action="#{cadastroBean.cadastrar}" style="margin:10px;" update="form" icon="ui-icon-check" />
+	</p:panel>
+	
+	<p:blockUI block="panel" trigger="transfBtn">
+		Carregando...
+	</p:blockUI>
+</h:form>
+</h:body>
+</html>

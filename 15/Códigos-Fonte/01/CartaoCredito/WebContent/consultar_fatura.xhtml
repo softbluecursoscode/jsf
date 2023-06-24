@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/layout.xhtml">
+	<ui:define name="title">Consultar Fatura</ui:define>
+	
+	<ui:define name="content">
+		<!-- Copia o parâmetro 'limpar' da request para o bean -->
+		<f:metadata>
+			<f:viewParam name="limpar" value="#{consultarFaturaBean.limpar}" />	
+		</f:metadata>
+		
+		<!-- Chama o método init() toda vez que a view é renderizada -->
+		<f:event listener="#{consultarFaturaBean.init}" type="preRenderView" />
+		
+		<h:form styleClass="wufoo">
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Cartão de crédito:" styleClass="desc" />
+				<h:selectOneMenu id="cartaoCredito" value="#{consultarFaturaBean.cartaoCredito.id}" required="true" onchange="submit()" valueChangeListener="#{consultarFaturaBean.listarFaturas}" immediate="true"  styleClass="field select addr">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{consultarFaturaBean.cartoesCredito}" var="c" itemValue="#{c.id}" itemLabel="#{c.bandeira} - #{c.descricao}" />
+				</h:selectOneMenu>
+				<h:message for="cartaoCredito" />
+				
+				<h:outputLabel value="Fatura:" styleClass="desc" />
+				<h:selectOneMenu id="fatura" value="#{consultarFaturaBean.fatura.id}" required="true" styleClass="field select addr">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{consultarFaturaBean.faturas}" var="f" itemValue="#{f.id}" itemLabel="#{consultarFaturaBean.formatarDataFatura(f.dataVencimento)}" />
+				</h:selectOneMenu>
+				<h:message for="fatura" />
+				
+				<h:commandButton value="Consultar" action="#{consultarFaturaBean.consultar}" styleClass="btTxt" />
+			</h:panelGrid>
+		</h:form>
+		
+		<h:form styleClass="wufoo">
+			<h:panelGroup rendered="#{consultarFaturaBean.lancamentos.size() > 0}">
+				<h:dataTable value="#{consultarFaturaBean.lancamentos}" var="l" styleClass="tabela" headerClass="cabecalho" columnClasses="colVenc,colDescricao,colValor,colParcela,colTipo">
+					<h:column>
+						<f:facet name="header">
+							Data
+						</f:facet>
+						<h:outputText value="#{l.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Descrição
+						</f:facet>
+						#{l.compra.descricao}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Valor
+						</f:facet>
+						<h:outputText value="#{l.valor}">
+							<f:convertNumber type="currency" />
+						</h:outputText>
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Parcela
+						</f:facet>
+						#{l.numParcela}/#{l.compra.numParcelas}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">
+							Tipo
+						</f:facet>
+						#{l.compra.tipo}
+					</h:column>
+				</h:dataTable>
+				<br />
+				<h:panelGrid columns="2">
+					<h:outputLabel value="Cartão de crédito:" styleClass="desc" />
+					<h:outputText value="#{consultarFaturaBean.cartaoCredito.bandeira} - #{consultarFaturaBean.cartaoCredito.descricao}" />
+					
+					<h:outputLabel value="Data de vencimento:" styleClass="desc" />
+					<h:outputText value="#{consultarFaturaBean.fatura.dataVencimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+					
+					<h:outputLabel value="Valor total:" styleClass="desc" />
+					<h:outputText value="#{consultarFaturaBean.fatura.valor}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
+	
+</html>

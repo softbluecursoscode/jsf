@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Prime Faces</title>
+	<style type="text/css">
+		.ui-widget, .ui-widget .ui-widget {
+    		font-size: 90%;
+		}
+	</style>
+</h:head>
+
+<h:body>
+<h:form id="form">
+	<p:messages id="messages" closable="true" />
+
+	<p:dataTable value="#{tableBean.despesas}" var="d" sortBy="#{d.data}" resizableColumns="true"
+	    selection="#{tableBean.selectedDespesa}" rowKey="#{d.id}" editable="true">
+	    
+	    <p:ajax event="rowEdit" listener="#{tableBean.onEdit}" update=":form:messages" />
+	    <p:ajax event="rowEditCancel" listener="#{tableBean.onCancel}" update=":form:messages" />
+	    
+		<f:facet name="header">Lista de Despesas</f:facet>
+		
+		<p:column selectionMode="multiple" />
+		
+		<p:column headerText="Data" sortBy="#{d.data}" style="width: 200px">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{d.data}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</f:facet>
+				<f:facet name="input">
+					<p:calendar value="#{d.data}" />
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		
+		<p:column headerText="Descrição" sortBy="#{d.descricao}" style="width: 300px">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{d.descricao}" />	
+				</f:facet>
+				<f:facet name="input">
+					<h:inputText value="#{d.descricao}" style="width: 100%" />
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		
+		<p:column headerText="Categoria" sortBy="#{d.categoria}" style="width: 150px">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{d.categoria}" />	
+				</f:facet>
+				<f:facet name="input">
+					<p:selectOneMenu value="#{d.categoria}" style="width:100%">
+						<f:selectItem itemLabel="Alimentação" itemValue="Alimentação" />
+						<f:selectItem itemLabel="Casa" itemValue="Casa" />
+						<f:selectItem itemLabel="Vestuário" itemValue="Vestuário" />
+						<f:selectItem itemLabel="Livros e Revistas" itemValue="Livros e Revistas" />
+						<f:selectItem itemLabel="Transportes" itemValue="Transportes" />
+					</p:selectOneMenu>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		
+		<p:column headerText="Valor" sortBy="#{d.valor}" style="width: 100px">
+			<h:outputText value="#{d.valor}">
+				<f:convertNumber type="currency" locale="pt_BR" />
+			</h:outputText>
+		</p:column>
+		
+		<p:column>
+			<p:rowEditor />
+		</p:column>
+
+	</p:dataTable>
+	
+	<p:commandButton value="Processar" action="#{tableBean.processar}" update="messages" />
+</h:form>
+</h:body>
+</html>

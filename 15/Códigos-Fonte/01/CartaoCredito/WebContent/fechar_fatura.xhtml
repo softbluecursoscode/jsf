@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/layout.xhtml">
+	<ui:define name="title">Fechar Fatura</ui:define>
+	
+	<ui:define name="content">
+		<!-- Copia o parâmetro 'limpar' da request para o bean -->
+		<f:metadata>
+			<f:viewParam name="limpar" value="#{fecharFaturaBean.limpar}" />	
+		</f:metadata>
+		
+		<!-- Chama o método init() toda vez que a view é renderizada -->
+		<f:event listener="#{fecharFaturaBean.init}" type="preRenderView" />
+		
+		<h:form styleClass="wufoo">
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Cartão de crédito:" styleClass="desc" />
+				<h:selectOneMenu id="cartaoCredito" value="#{fecharFaturaBean.cartaoCreditoId}" required="true" styleClass="field select addr">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{fecharFaturaBean.cartoesCredito}" var="c" itemValue="#{c.id}" itemLabel="#{c.bandeira} - #{c.descricao}" />
+				</h:selectOneMenu>
+		
+				<h:commandButton value="Pesquisar" action="#{fecharFaturaBean.pesquisar}" styleClass="btTxt" />
+				
+				<h:outputText value="#{' '}" />
+				<h:message for="cartaoCredito" />
+			</h:panelGrid>
+			
+		</h:form>
+		<h:form styleClass="wufoo">
+			<h:panelGrid columns="3" rendered="#{fecharFaturaBean.lancamentos.size() > 0}">
+				<h:outputLabel value="Mês/Ano:" styleClass="desc" />
+				<h:inputText id="mesAno" value="#{fecharFaturaBean.mesAno}" required="true" maxlength="7" styleClass="field text small">
+					<f:convertDateTime pattern="MM/yyyy" />
+				</h:inputText>
+				<h:message for="mesAno" />
+			
+				<h:outputLabel value="Lançamentos:" styleClass="desc" />
+				<h:selectManyCheckbox id="lancamentos" value="#{fecharFaturaBean.lancamentosIds}" layout="pageDirection" required="true">
+					<f:selectItems value="#{fecharFaturaBean.lancamentos}" var="l" 
+						itemValue="#{l.compra.id}_#{l.numParcela}" itemLabel="#{fecharFaturaBean.formatLancamento(l)}" />
+				</h:selectManyCheckbox>
+				<h:message for="lancamentos" />
+				
+				<h:commandButton value="Fechar fatura" action="#{fecharFaturaBean.fecharFatura}" styleClass="btTxt" />
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+	
+</html>

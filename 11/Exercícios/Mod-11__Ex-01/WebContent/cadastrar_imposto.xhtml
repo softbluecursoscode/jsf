@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Gerenciamento de Impostos de Veículos</title>
+</h:head>
+
+<body>
+
+<h:link outcome="index">Página Inicial</h:link>
+
+<h2>Cadastrar Imposto</h2>
+
+<h:form>
+	<p>
+		Placa:
+		<h:inputText id="placa" value="#{impostoBean.placa}" disabled="#{impostoBean.veiculo != null}" required="true" requiredMessage="Forneça uma placa" />
+		<h:commandButton value="Pesquisar" action="#{impostoBean.pesquisarVeiculo}" disabled="#{impostoBean.veiculo != null}" />
+		<h:commandButton value="Limpar" action="#{impostoBean.limpar}" immediate="true" />
+		<h:message for="placa" />
+	</p>
+</h:form>
+
+<h:panelGroup rendered="#{impostoBean.veiculo != null}">
+	<p>
+		Marca: #{impostoBean.veiculo.marca} |
+		Modelo:	#{impostoBean.veiculo.modelo} |
+		Ano: #{impostoBean.veiculo.ano}
+	</p>
+	<h:form>
+		<h:panelGrid columns="3">
+			Valor do imposto:
+			<h:inputText id="valor" value="#{impostoBean.imposto.valor}" required="true" requiredMessage="Forneça um valor válido" converterMessage="Forneça um valor válido">
+				<f:convertNumber maxIntegerDigits="2" maxFractionDigits="2" locale="pt_BR" />
+			</h:inputText>
+			<h:message for="valor" />
+			
+			Número de parcelas:
+			<h:selectOneMenu id="numParcelas" value="#{impostoBean.imposto.numParcelas}">
+				<f:selectItem itemValue="1" />
+				<f:selectItem itemValue="2" />
+				<f:selectItem itemValue="3" />
+				<f:selectItem itemValue="4" />
+				<f:selectItem itemValue="5" />
+				<f:selectItem itemValue="6" />
+			</h:selectOneMenu>
+			<h:message for="numParcelas" />
+			
+			Dia de vencimento:
+			<h:selectOneMenu id="diaVencimento" value="#{impostoBean.imposto.diaVencimento}">
+				<f:selectItem itemValue="5" />
+				<f:selectItem itemValue="10" />
+				<f:selectItem itemValue="15" />
+				<f:selectItem itemValue="20" />
+			</h:selectOneMenu>
+			<h:message for="diaVencimento" />
+			
+			<h:commandButton value="Cadastrar" action="#{impostoBean.cadastrarImposto}" />
+		</h:panelGrid>
+	</h:form>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{requestScope.msg != null}">
+	<script>
+		alert('#{requestScope.msg}');
+	</script>
+</h:panelGroup>
+
+</body>
+</html>

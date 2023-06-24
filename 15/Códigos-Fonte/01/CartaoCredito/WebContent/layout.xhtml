@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<!-- Define o locale pt_BR como padrão para todas as páginas -->
+<f:view locale="pt_BR">
+
+	<h:head>
+		<meta http-equiv="Content-Type"	content="text/html; charset=ISO-8859-1" />
+		<title>Gerenciamento de Cartões de Crédito</title>
+
+		<!-- Referencia os arquivos CSS -->
+		<h:outputStylesheet library="css" name="form.css" />
+		<h:outputStylesheet library="css" name="structure.css" />
+		<h:outputStylesheet library="css" name="theme.css" />
+		<h:outputStylesheet library="css" name="styles.css" />
+	</h:head>
+
+	<h:body id="public">
+		<div id="container">
+			<div class="info">
+				<br />
+				<h:link outcome="index">Página Inicial</h:link>
+				|
+				<h:link outcome="cadastrar_cartao">Cadastrar Cartão</h:link>
+				|
+				<h:link outcome="cadastrar_compra">Cadastrar Compra</h:link>
+				|
+				<h:link outcome="listar_compras" value="Listar Compras">
+					<f:param name="limpar" value="true" />
+				</h:link>
+				|
+				<h:link outcome="fechar_fatura" value="Fechar Fatura">
+					<f:param name="limpar" value="true" />
+				</h:link>
+				|
+				<h:link outcome="consultar_fatura" value="Consultar Fatura">
+					<f:param name="limpar" value="true" />
+				</h:link>
+				<br />
+			</div>
+
+			<div class="info">
+				<h2>Gerenciamento de Cartões de Crédito</h2>
+				<div>
+					<ui:insert name="title" />
+				</div>
+			</div>
+			<ui:insert name="content" />
+			<h:panelGroup rendered="#{requestScope.msg != null}">
+				<script>
+					alert("#{requestScope.msg}");
+				</script>
+			</h:panelGroup>
+		</div>
+	</h:body>
+</f:view>
+
+</html>

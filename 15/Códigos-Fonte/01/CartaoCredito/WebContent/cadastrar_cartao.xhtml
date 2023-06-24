@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/layout.xhtml">
+	<ui:define name="title">Cadastro de Cartão de Crédito</ui:define>
+	
+	<ui:define name="content">
+		<script>
+			function excluir() {
+				return confirm("Deseja excluir o registro?")
+			}
+		</script>
+		
+		<h:form styleClass="wufoo">
+			<h:inputHidden value="#{cartaoBean.cartaoCredito.id}" />
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Bandeira:" styleClass="desc" />
+				<h:inputText id="bandeira" value="#{cartaoBean.cartaoCredito.bandeira}" required="true" maxlength="20" styleClass="field text large">
+					<f:validateLength maximum="20" />
+				</h:inputText>
+				<h:message for="bandeira" />
+				
+				<h:outputLabel value="Descrição:" styleClass="desc" />
+				<h:inputText id="descricao" value="#{cartaoBean.cartaoCredito.descricao}" required="true" maxlength="30" styleClass="field text large">
+					<f:validateLength maximum="30" />
+				</h:inputText>
+				<h:message for="descricao" />
+				
+				<h:outputLabel value="Número:" styleClass="desc" />
+				<h:inputText id="numero" value="#{cartaoBean.cartaoCredito.numero}" required="true" maxlength="16" styleClass="field text large">
+					<f:validator validatorId="validator.NumeroCartaoCredito" />
+				</h:inputText>
+				<h:message for="numero" />
+				
+				<h:outputLabel value="Limite:" styleClass="desc" />
+				<h:inputText id="limite" value="#{cartaoBean.cartaoCredito.limite}" required="true" maxlength="8" styleClass="field text large">
+					<f:convertNumber type="number" groupingUsed="false" minFractionDigits="2" maxFractionDigits="2" />
+					<f:validateDoubleRange minimum="0" maximum="99999.99" />
+				</h:inputText>
+				<h:message for="limite" />
+				
+				<h:outputLabel value="Data:" styleClass="desc" />
+				<h:inputText id="data" value="#{cartaoBean.cartaoCredito.dataVencimento}" required="true" maxlength="7" styleClass="field text large">
+					<f:convertDateTime pattern="MM/yyyy" />
+				</h:inputText>
+				<h:message for="data" />
+				
+				<h:outputLabel value="Dia venc. fatura:" styleClass="desc" />
+				<h:inputText id="diaVencFatura" value="#{cartaoBean.cartaoCredito.diaVencimentoFatura}" required="true" maxlength="2" styleClass="field text large">
+					<f:validateLongRange minimum="1" maximum="31" />
+				</h:inputText>
+				<h:message for="diaVencFatura" />
+				
+				<h:outputText value="#{''}" />
+				<h:panelGroup>
+					<h:commandButton value="Gravar" action="#{cartaoBean.gravar}" styleClass="btTxt" />
+					<h:commandButton value="Limpar" action="#{cartaoBean.limpar}" styleClass="btTxt" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+		
+		<h:form styleClass="wufoo">
+			<h:dataTable value="#{cartaoBean.cartoesCredito}" var="c" rendered="#{cartaoBean.cartoesCredito.size() > 0}" styleClass="tabela" headerClass="cabecalho" columnClasses="colBandeira,colDescricao,colNumero,colLimite,colVenc,colDia,colOp">
+				<h:column>
+					<f:facet name="header">
+						Bandeira
+					</f:facet>
+					#{c.bandeira}
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						Descrição
+					</f:facet>
+					#{c.descricao}
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						Número
+					</f:facet>
+					<h:outputText value="#{c.numero}">
+						<f:converter converterId="converter.NumeroCartaoCredito" />
+					</h:outputText>
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						Limite
+					</f:facet>
+					<h:outputText value="#{c.limite}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						Vencimento
+					</f:facet>
+					<h:outputText value="#{c.dataVencimento}">
+						<f:convertDateTime pattern="MM/yyyy" />
+					</h:outputText>
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						Dia Venc. Fatura
+					</f:facet>
+					#{c.diaVencimentoFatura}
+				</h:column>
+				
+				<h:column>
+					<h:commandLink action="#{cartaoBean.alterar(c.id)}">Alterar</h:commandLink>
+					|
+					<h:commandLink action="#{cartaoBean.excluir(c.id)}" onclick="return excluir();">Excluir</h:commandLink>	
+				</h:column>
+			</h:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+	
+</html>

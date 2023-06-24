@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Gerenciamento de Alunos</title>
+</h:head>
+
+<body>
+
+<h:form>
+<h:inputHidden value="#{alunos.alterar}" />
+<h:inputHidden value="#{alunos.aluno.numMatricula}" rendered="#{alunos.alterar}" />
+<table border="1">
+	<tr>
+		<td colspan="2" align="center"><h3>Dados do Aluno</h3></td>
+	</tr>
+	<tr>
+		<td style="width: 120px;">Núm. Matrícula:</td>
+		<td style="width: 230px;"><b>
+			<h:outputText value="#{alunos.aluno.numMatricula}" rendered="#{alunos.alterar}" />
+			<h:inputText value="#{alunos.aluno.numMatricula}" rendered="#{!alunos.alterar}" maxlength="10" required="true" />
+		</b></td>
+	</tr>
+	<tr>
+		<td style="width: 120px;">Nome:</td>
+		<td style="width: 230px;"><h:inputText value="#{alunos.aluno.nome}" maxlength="50" required="true" /></td>
+	</tr>
+	<tr>
+		<td style="width: 120px;">Data Nascimento:</td>
+		<td style="width: 230px;">
+			<h:inputText value="#{alunos.aluno.dataNascimento}" maxlength="10" required="true">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:inputText>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" colspan="2">
+			<h:button value="Cancelar" outcome="listar_alunos" />
+			<h:commandButton value="Gravar" action="#{alunos.salvar}" />
+		</td>
+	</tr>
+</table>
+</h:form>
+
+</body>
+</html>

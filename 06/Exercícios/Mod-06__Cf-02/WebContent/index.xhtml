@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:my="http://mytags">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<title>Facelets Tags</title>
+</h:head>
+
+<h:body>
+	<h:form>
+	<h:panelGrid columns="2">
+		Data:
+		<my:date dateObj="#{dateBean.date}" />
+	</h:panelGrid>
+	<h:commandButton value="Processar" action="#{dateBean.processar}" />
+	</h:form>
+</h:body>
+</html>

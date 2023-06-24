@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Associar Alunos a Turmas</title>
+</h:head>
+
+<body>
+<h3>Associar Alunos a Turmas</h3>
+
+<h:form>
+	<table>
+		<tr>
+			<td>Turma:</td>
+			<td>
+				<h:selectOneMenu value="#{alunosTurmas.turmaId}" onchange="submit()" valueChangeListener="#{alunosTurmas.mudouTurma}">
+					<f:selectItem noSelectionOption="true" />
+					<f:selectItems value="#{alunosTurmas.turmas}" var="turma" itemValue="#{turma.id}" itemLabel="#{turma.nome}" />
+				</h:selectOneMenu>
+			</td>
+			<td></td>
+		</tr>
+		<tr valign="top">
+			<td>Alunos:</td>
+			<td colspan="2">
+				<h:selectManyCheckbox value="#{alunosTurmas.alunosSelecionados}" layout="pageDirection">
+					<f:selectItems value="#{alunosTurmas.alunos}" var="aluno" itemValue="#{aluno.numMatricula}" itemLabel="#{aluno.numMatricula} - #{aluno.nome}" />
+				</h:selectManyCheckbox>
+			</td>
+		</tr>
+	</table>
+	
+	<h:commandButton value="Associar" action="#{alunosTurmas.associarAlunos}" />
+
+</h:form>
+<p>
+	<h:link value="Página Inicial" outcome="index" />
+</p>
+</body>
+</html>

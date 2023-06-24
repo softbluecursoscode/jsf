@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Gerenciamento de Impostos de Veículos</title>
+</h:head>
+
+<body>
+
+<h:link outcome="index">Página Inicial</h:link>
+
+<h2>Cadastrar Pagamento</h2>
+
+<h:form>
+	<p>
+		CPF:
+		<h:inputText id="cpf" value="#{pagamentoBean.cpf}" disabled="#{pagamentoBean.proprietario != null}" required="true" requiredMessage="Forneça um CPF" />
+		<h:commandButton value="Pesquisar" action="#{pagamentoBean.pesquisarCPF}" disabled="#{pagamentoBean.proprietario != null}" />
+		<h:commandButton value="Limpar" action="#{pagamentoBean.limpar}" immediate="true" />
+		<h:message for="cpf" />
+	</p>
+</h:form>
+
+<h:panelGroup rendered="#{pagamentoBean.proprietario != null}">
+	<p>
+		Nome: #{pagamentoBean.proprietario.nome}
+	</p>
+	<h:form>
+		<p>
+			Veículo:
+			<h:selectOneMenu value="#{pagamentoBean.placa}">
+				<f:selectItems value="#{pagamentoBean.veiculos}" var="v" itemValue="#{v.placa}" itemLabel="#{v.placa}" />
+			</h:selectOneMenu>
+			<h:commandButton value="Consultar" action="#{pagamentoBean.consultarImposto}" />
+		</p>
+	</h:form>
+</h:panelGroup>
+
+<h:form>
+	<h:dataTable value="#{pagamentoBean.parcelas}" var="p" rendered="#{pagamentoBean.parcelas != null}">
+		<h:column>
+			<f:facet name="header">
+				Núm.
+			</f:facet>
+			#{p.numParcela}
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				Valor
+			</f:facet>
+			<h:outputText value="#{p.valor}">
+				<f:convertNumber type="currency" locale="pt_BR" />
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				Data Venc.
+			</f:facet>
+			<h:outputText value="#{p.dataVencimento}">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:outputText>
+		</h:column>
+		<h:column>
+			<f:facet name="header">
+				Data Pagto.
+			</f:facet>
+			<h:outputText value="#{p.dataPagamento}" rendered="#{p.dataPagamento != null}">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:outputText>
+			<h:commandButton value="Pagar" action="#{pagamentoBean.pagarParcela(p)}" rendered="#{p.dataPagamento == null}" />
+		</h:column>
+	</h:dataTable>
+</h:form>
+
+<h:panelGroup rendered="#{requestScope.msg != null}">
+	<script>
+		alert('#{requestScope.msg}');
+	</script>
+</h:panelGroup>
+
+</body>
+</html>

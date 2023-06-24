@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Cadastro de Despesas</title>
+</h:head>
+
+<h:outputStylesheet library="css" name="styles.css" />
+
+<body>
+
+<h:messages styleClass="message" />
+
+<h:form>
+<h:dataTable value="#{table.despesas}" var="d" styleClass="tabela" headerClass="cabecalho" columnClasses="colNumero,colData,colDesc,colValor,colOp" rendered="#{table.despesas.rowCount > 0}">
+	<f:facet name="header">
+		Lista de Despesas
+	</f:facet>
+	
+	<h:column>
+		<f:facet name="header">
+			#
+		</f:facet>
+		#{table.despesas.rowIndex + 1}
+	</h:column>
+	
+	<h:column>
+		<f:facet name="header">
+			Data
+		</f:facet>
+		<h:outputText value="#{d.data}" rendered="#{!table.isEdit(d)}">
+			<f:convertDateTime pattern="dd/MM/yyyy" />
+		</h:outputText>
+		<h:inputText value="#{d.data}" rendered="#{table.isEdit(d)}" styleClass="smallInput" required="true">
+			<f:convertDateTime pattern="dd/MM/yyyy" />
+		</h:inputText>
+	</h:column>
+	<h:column>
+		<f:facet name="header">
+			Descrição
+		</f:facet>
+		<h:outputText value="#{d.descricao}" rendered="#{!table.isEdit(d)}" />
+		<h:inputText value="#{d.descricao}" rendered="#{table.isEdit(d)}" styleClass="bigInput" required="true" />
+	</h:column>
+	<h:column>
+		<f:facet name="header">
+			Valor
+		</f:facet>
+		<h:outputText value="#{d.valor}" rendered="#{!table.isEdit(d)}">
+			<f:convertNumber type="currency" locale="pt_BR" />
+		</h:outputText>
+		<h:inputText value="#{d.valor}" rendered="#{table.isEdit(d)}" styleClass="smallInput" required="true">
+			<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" />
+		</h:inputText>
+	</h:column>
+	<h:column>
+		<h:panelGroup rendered="#{!table.isEdit(d)}">
+			<h:commandLink value="Alterar" action="#{table.editar(d)}" /> | 
+			<h:commandLink value="Excluir" action="#{table.excluir(d)}" />
+		</h:panelGroup>
+		<h:panelGroup rendered="#{table.isEdit(d)}">
+			<h:commandLink value="Gravar" action="#{table.atualizar(d)}" /> | 
+			<h:commandLink value="Cancelar" action="#{table.cancelar(d)}" immediate="true" />
+		</h:panelGroup>
+	</h:column>
+</h:dataTable>
+
+<h:panelGroup rendered="#{table.despesas.rowCount == 0}">
+	<h:outputText styleClass="message" value="Não existem despesas cadastradas" />
+	<br />
+</h:panelGroup>
+
+<h:commandButton value="Inserir" action="#{table.inserir}" />
+</h:form>
+</body>
+</html>
